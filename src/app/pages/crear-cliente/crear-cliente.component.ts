@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms'; // Importante para [(ngModel)]
 import { Router } from '@angular/router';
 import { ClienteService } from '../../services/cliente.service';
 import { Cliente } from '../../interfaces/cliente.interface';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-crear-cliente',
@@ -16,7 +17,7 @@ export class CrearClienteComponent {
   
   private clienteService = inject(ClienteService);
   private router = inject(Router);
-
+  private notify = inject(NotificationService);
   // Inicializamos el objeto vacío
   cliente: Cliente = {
     idCliente: 0,
@@ -29,7 +30,7 @@ export class CrearClienteComponent {
   guardar() {
     // Validamos campos básicos (opcional, el HTML ya tiene 'required')
     if (!this.cliente.nombre || !this.cliente.telefono) {
-      alert("Por favor completa los campos obligatorios");
+      this.notify.error("Por favor completa los campos obligatorios");
       return;
     }
 
@@ -37,12 +38,12 @@ export class CrearClienteComponent {
       
       next: (res) => {
         console.log('Cliente creado:', res);
-        // Redirigir a la tabla de clientes
+        this.notify.success("¡Cliente registrado exitosamente!");
         this.router.navigate(['/clientes']);
       },
       error: (err) => {
         console.error('Error al guardar:', err);
-        alert("Ocurrió un error al guardar el cliente.");
+        this.notify.error("Ocurrió un error al guardar el cliente.");
       }
     });
   }

@@ -39,9 +39,7 @@
             </div>
           </div>
 
-          <form (ngSubmit)="guardarPago()">
-            
-            <div class="form-floating mb-4">
+          <form> <div class="form-floating mb-4">
               <input type="number" class="form-control form-control-lg fw-bold text-center fs-4" 
                      id="montoInput" placeholder="0.00" 
                      [(ngModel)]="montoIngresado" name="monto" required min="1" step="0.01">
@@ -49,8 +47,11 @@
             </div>
 
             <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary btn-lg shadow-sm fw-bold" 
-                      [disabled]="!montoIngresado || montoIngresado <= 0">
+              <button type="button" 
+                      class="btn btn-primary btn-lg shadow-sm fw-bold" 
+                      [disabled]="!montoIngresado || montoIngresado <= 0"
+                      data-bs-toggle="modal" 
+                      data-bs-target="#modalConfirmarPago">
                 <i class="bi bi-cash-coin me-2"></i> Confirmar Pago
               </button>
               
@@ -72,4 +73,29 @@
 <div *ngIf="loading" class="text-center py-5">
   <div class="spinner-border text-primary" role="status"></div>
   <p class="mt-2 text-muted">Cargando información del pago...</p>
+</div>
+
+<div class="modal fade" id="modalConfirmarPago" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow rounded-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title fw-bold">Confirmación de Pago</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center p-4">
+        <div class="mb-3 text-primary bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3">
+            <i class="bi bi-question-lg fs-1"></i>
+        </div>
+        <p class="mb-1 text-muted">Estás a punto de registrar un pago por:</p>
+        <h2 class="fw-bold text-dark display-6">{{ montoIngresado | currency }}</h2>
+        <p class="small text-muted">¿Deseas continuar?</p>
+      </div>
+      <div class="modal-footer border-top-0 justify-content-center pb-4">
+        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary px-4 fw-bold" data-bs-dismiss="modal" (click)="ejecutarPago()">
+          Sí, Registrar
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

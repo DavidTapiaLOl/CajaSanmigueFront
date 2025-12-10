@@ -7,6 +7,7 @@ import { PrestamoService } from '../../services/prestamo.service';
 import { Cliente } from '../../interfaces/cliente.interface';
 import { Prestamo } from '../../interfaces/prestamo.interface';
 import { PipeDate } from '../../pipes/pipeDate.pipe';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-perfil-cliente',
@@ -20,6 +21,7 @@ export class PerfilClienteComponent implements OnInit {
   private clienteService = inject(ClienteService);
   private prestamoService = inject(PrestamoService);
   private router = inject(Router);
+  private notify = inject(NotificationService);
 
   cliente: Cliente | null = null;
   loading: boolean = true;
@@ -73,12 +75,12 @@ export class PerfilClienteComponent implements OnInit {
 
     this.clienteService.updateCliente(this.clienteEdicion.idCliente, this.clienteEdicion).subscribe({
       next: (res) => {
-        alert("Cliente actualizado correctamente");
+        this.notify.success('¡Cliente actualizado correctamente');
         this.cliente = { ...this.clienteEdicion }; // Actualizamos la vista
       },
       error: (err) => {
         console.error(err);
-        alert("Error al actualizar cliente");
+        this.notify.error("Error al actualizar cliente");
       }
     });
   }
@@ -90,12 +92,12 @@ export class PerfilClienteComponent implements OnInit {
     if (confirm(`¿Estás seguro de eliminar a ${this.cliente.nombre}? Esta acción no se puede deshacer.`)) {
       this.clienteService.deleteCliente(this.cliente.idCliente).subscribe({
         next: () => {
-          alert("Cliente eliminado");
+          this.notify.success('¡Cliente eliminado!');
           this.router.navigate(['/clientes']);
         },
         error: (err) => {
           console.error(err);
-          alert("No se pudo eliminar (verifica que no tenga préstamos activos)");
+          this.notify.error("No se pudo eliminar (verifica que no tenga préstamos activos)");
         }
       });
     }
@@ -128,17 +130,23 @@ export class PerfilClienteComponent implements OnInit {
       estado: 'Activo',
     };
 
+    // Validar montos negativos o cero (Opcional pero recomendado)
+    if (prestamoDTO.monto <= 0) {
+      this.notify.error("El monto debe ser mayor a 0");
+      return;
+    }
+
     // 3. Enviar al Backend
     this.prestamoService.createPrestamo(prestamoDTO as Prestamo).subscribe({
       next: (res) => {
-        alert('¡Préstamo creado exitosamente!');
+        this.notify.success('¡Préstamo otorgado con éxito!');
         // Cerrar modal (manualmente o recargar)
         // Redirigir a la lista de préstamos para verlo
         this.router.navigate(['/prestamos']);
       },
       error: (err) => {
         console.error(err);
-        alert('Error al crear el préstamo.');
+        this.notify.error('No se pudo crear el préstamo. Intenta nuevamente.');
       },
     });
   }

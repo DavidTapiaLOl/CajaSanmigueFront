@@ -1,9 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Importante para pipes y ngIf
-import { FormsModule } from '@angular/forms';   // Importante para ngModel
+import { CommonModule } from '@angular/common'; 
+import { FormsModule } from '@angular/forms';   
 import { ActivatedRoute, Router } from '@angular/router';
 import { PagoService } from '../../services/pago.service';
 import { Pago } from '../../interfaces/prestamo.interface';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-registrar-pago',
@@ -17,6 +18,7 @@ export class RegistrarPagoComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private pagoService = inject(PagoService);
+  private notify = inject(NotificationService);
 
   pago: Pago | null = null;
   montoIngresado: number | null = null;
@@ -35,43 +37,36 @@ export class RegistrarPagoComponent implements OnInit {
     this.pagoService.getPago(id).subscribe({
       next: (data) => {
         this.pago = data;
-        // Pre-llenamos el monto con lo que se debe pagar
         this.montoIngresado = data.montoProgramado; 
         this.loading = false;
       },
       error: (err) => {
         console.error(err);
         this.loading = false;
-        alert("Error cargando el pago");
+        this.notify.error("Error al cargar la información del pago");
         this.cancelar();
       }
     });
   }
 
-  guardarPago() {
+  // Este método se llama DESDE EL MODAL (Botón "Sí, Registrar")
+  ejecutarPago() {
     if (!this.pago?.idPago || !this.montoIngresado) return;
 
-    if (confirm(`¿Confirmas recibir el pago de $${this.montoIngresado}?`)) {
-      
-      this.pagoService.registrarPago(this.pago.idPago, this.montoIngresado).subscribe({
-        next: (res) => {
-          alert("¡Pago registrado con éxito!");
-          // Redirigir de vuelta al detalle del préstamo
-          this.router.navigate(['/prestamo', this.pago?.idPrestamo]);
-        },
-        error: (err) => {
-          console.error(err);
-          // Si el backend devuelve mensaje de error (ej: monto incompleto)
-          const msg = err.error?.message || "Ocurrió un error al registrar el pago.";
-          alert(msg);
-        }
-      });
-
-    }
+    this.pagoService.registrarPago(this.pago.idPago, this.montoIngresado).subscribe({
+      next: (res) => {
+        this.notify.success("¡Pago registrado correctamente!");
+        this.router.navigate(['/prestamo', this.pago?.idPrestamo]);
+      },
+      error: (err) => {
+        console.error(err);
+        const msg = err.error?.message || "Ocurrió un error al registrar el pago.";
+        this.notify.error(msg);
+      }
+    });
   }
 
   cancelar() {
-    // Si tenemos el ID del préstamo, volvemos ahí. Si no, a préstamos general.
     if (this.pago?.idPrestamo) {
       this.router.navigate(['/prestamo', this.pago.idPrestamo]);
     } else {
