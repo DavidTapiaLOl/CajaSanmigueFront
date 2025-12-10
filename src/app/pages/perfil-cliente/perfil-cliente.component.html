@@ -1,0 +1,267 @@
+<div class="container-fluid py-4 fade-in" *ngIf="cliente">
+
+  <div class="mb-4">
+    <a routerLink="/clientes" class="text-decoration-none text-muted small fw-bold">
+      <i class="bi bi-arrow-left me-1"></i> Volver a Clientes
+    </a>
+    <h2 class="fw-bold text-dark mt-2">Perfil del Cliente</h2>
+  </div>
+
+  <div class="row g-4">
+    
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 text-center p-4 h-100 position-relative">
+        
+        <div class="position-absolute top-0 end-0 mt-3 me-3">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-3" type="button" data-bs-toggle="dropdown">
+              Acción
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+              <li>
+                <button class="dropdown-item py-2 small" (click)="abrirModalEdicion()" data-bs-toggle="modal" data-bs-target="#modalEditarCliente">
+                  <i class="bi bi-pencil me-2 text-primary"></i> Editar Información
+                </button>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <button class="dropdown-item py-2 small text-danger" (click)="eliminarCliente()">
+                  <i class="bi bi-trash me-2"></i> Eliminar Cliente
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mb-3 mt-2">
+          <div class="avatar-large bg-primary bg-opacity-10 text-primary rounded-circle mx-auto d-flex align-items-center justify-content-center fw-bold">
+            {{ cliente.nombre.charAt(0) }}
+          </div>
+        </div>
+
+        <h4 class="fw-bold mb-1">{{ cliente.nombre }} {{ cliente.apellidos }}</h4>
+        <p class="text-muted small">ID Cliente: #{{ cliente.idCliente }}</p>
+
+        <hr class="my-4 opacity-10">
+
+        <div class="text-start">
+          <div class="mb-3">
+            <label class="small text-muted fw-bold text-uppercase">Teléfono</label>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-telephone-fill text-primary me-2"></i>
+              <span class="fw-medium">{{ cliente.telefono }}</span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="small text-muted fw-bold text-uppercase">Dirección</label>
+            <div class="d-flex align-items-start">
+              <i class="bi bi-geo-alt-fill text-danger me-2 mt-1"></i>
+              <span class="fw-medium">{{ cliente.direccion }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-auto pt-4">
+          <button class="btn btn-primary w-100 py-2 shadow-sm rounded-3 fw-bold" 
+                  data-bs-toggle="modal" data-bs-target="#modalPrestamo">
+            <i class="bi bi-plus-circle me-2"></i> Nuevo Préstamo
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+        
+        <div class="card-header bg-white py-3 px-4 border-bottom d-flex justify-content-between align-items-center">
+          <h6 class="fw-bold mb-0">Historial de Créditos</h6>
+          <span class="badge bg-light text-dark border">{{ historial.length }} Registros</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 text-nowrap">
+            <thead class="bg-light">
+              <tr class="text-muted small text-uppercase">
+                <th class="ps-4">ID</th>
+                <th>Fecha Inicio</th>
+                <th>Monto</th>
+                <th>Intereses</th>
+                <th>Total Deuda</th>
+                <th>Lapzo</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr *ngFor="let p of historial">
+                <td class="ps-4 fw-bold text-muted">#{{ p.idPrestamo }}</td>
+                <td class="text-muted small">{{ p.fechaInicio | PipeDate }}</td>
+                <td class="fw-bold text-dark">{{ p.monto | currency }}</td>
+                <td>
+                  <span class="fw-bold text-dark">
+                    {{ p.interes * 100 }}%<br> 
+                    <span class="small text-muted">{{ p.montoMulta * 100 }}% Multa</span>
+                  </span>
+                </td>
+                <td class="fw-bold text-primary">{{ p.totalAPagar | currency }}</td>
+                <td>
+                  <span class="small text-muted">
+                    {{ p.numeroCuotas }} cuotas <br> 
+                    <span class="fw-bold text-dark">{{ p.lapzo }}</span>
+                  </span>
+                </td>
+                <td>
+                  <span class="badge rounded-pill fw-normal px-2 py-1 small"
+                    [ngClass]="{
+                      'bg-success bg-opacity-10 text-withe': p.estado === 'Activo',
+                      'bg-secondary bg-opacity-10 text-withe': p.estado === 'Terminado' || p.estado === 'Pagado',
+                      'bg-warning bg-opacity-10 text-withe': p.estado === 'Pendiente'
+                    }">
+                    {{ p.estado }}
+                  </span>
+                </td>
+
+                <td>
+                  <button [routerLink]="['/prestamo', p.idPrestamo]" class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-3">
+                    Detalles <i class="bi bi-arrow-right-short ms-1"></i>
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="historial.length === 0">
+                <td colspan="8" class="text-center py-5 text-muted">
+                  <i class="bi bi-inbox fs-1 d-block mb-2 opacity-25"></i>
+                  Este cliente no tiene préstamos registrados.
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary" role="status"></div>
+  <p class="mt-2 text-muted">Cargando perfil...</p>
+</div>
+
+<div class="modal fade" id="modalPrestamo" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow rounded-4">
+      
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold" id="modalLabel">Otorgar Préstamo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <div class="alert alert-light border mb-4 d-flex align-items-center">
+          <i class="bi bi-info-circle-fill text-primary me-2"></i>
+          <small>Se asignará al cliente: <strong>{{ cliente?.nombre }}</strong></small>
+        </div>
+
+        <form>
+          <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="monto" [(ngModel)]="nuevoPrestamo.monto" name="monto">
+            <label for="monto">Monto a Prestar ($)</label>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <div class="form-floating">
+                <input type="number" class="form-control" id="interes" [(ngModel)]="nuevoPrestamo.interes" name="interes" step="0.01">
+                <label for="interes">Interés (0.40)</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-floating">
+                <input type="number" class="form-control" id="multa" [(ngModel)]="nuevoPrestamo.montoMulta" name="multa" step="0.01">
+                <label for="multa">Multa (0.04)</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <div class="form-floating">
+                <input type="number" class="form-control" id="cuotas" [(ngModel)]="nuevoPrestamo.numeroCuotas" name="cuotas">
+                <label for="cuotas">No. Cuotas</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-floating">
+                <select class="form-select" id="lapzo" [(ngModel)]="nuevoPrestamo.lapzo" name="lapzo">
+                  <option value="Semanal">Semanal</option>
+                  <option value="Quincenal">Quincenal</option>
+                  <option value="Mensual">Mensual</option>
+                </select>
+                <label for="lapzo">Plazo</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer border-top-0 pt-0 px-4 pb-4">
+        <button type="button" class="btn btn-light w-100" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary w-100" (click)="crearPrestamo()" data-bs-dismiss="modal">
+          Confirmar Préstamo
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow rounded-4">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold">Editar Información</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="editNombre" [(ngModel)]="clienteEdicion.nombre" name="nombre">
+                <label for="editNombre">Nombre</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="editApellidos" [(ngModel)]="clienteEdicion.apellidos" name="apellidos">
+                <label for="editApellidos">Apellidos</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="tel" class="form-control" id="editTelefono" [(ngModel)]="clienteEdicion.telefono" name="telefono">
+            <label for="editTelefono">Teléfono</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <textarea class="form-control" id="editDireccion" [(ngModel)]="clienteEdicion.direccion" name="direccion" style="height: 100px"></textarea>
+            <label for="editDireccion">Dirección</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0 pt-0 px-4 pb-4">
+        <button type="button" class="btn btn-light w-100" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary w-100" (click)="guardarEdicion()" data-bs-dismiss="modal">
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

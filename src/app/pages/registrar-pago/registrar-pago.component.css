@@ -1,0 +1,21 @@
+/* Animación */
+.fade-in { animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Input Gigante */
+.form-control-lg {
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  height: 60px;
+}
+
+.form-control-lg:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+  background-color: #f8faff;
+}
+
+.form-floating > label {
+  text-align: center;
+  width: 100%; /* Centrar label flotante */
+}

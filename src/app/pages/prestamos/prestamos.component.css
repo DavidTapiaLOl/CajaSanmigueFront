@@ -1,0 +1,69 @@
+/* Animación de entrada */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Inputs de Filtro Modernos */
+.form-control, .form-select {
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1); /* Resplandor azul suave */
+}
+
+.form-floating > label {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* Tabla */
+.table thead th {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom-width: 1px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.table tbody td {
+  vertical-align: middle;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Avatares (Círculo con inicial) */
+.avatar-initials {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.75rem;
+  letter-spacing: 0.3px;
+}
+
+/* Botón Más Información */
+.btn-outline-primary {
+  border-width: 1px;
+  font-size: 0.8rem;
+}
+
+.btn-outline-primary:hover {
+  transform: translateX(3px); /* Pequeña animación al pasar el mouse */
+  transition: transform 0.2s;
+}

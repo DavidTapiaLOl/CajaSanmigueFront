@@ -1,0 +1,29 @@
+.avatar-circle {
+  width: 48px;
+  height: 48px;
+  font-size: 1.2rem;
+}
+
+.table thead th {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom-width: 1px;
+  padding: 1rem;
+}
+
+.table tbody td {
+  vertical-align: middle;
+  padding: 1rem;
+}
+
+.form-control, .form-select {
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: #fff;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+}

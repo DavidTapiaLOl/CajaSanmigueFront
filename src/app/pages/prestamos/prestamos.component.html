@@ -1,0 +1,182 @@
+<div class="container-fluid py-4 fade-in">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold text-dark mb-1">Gestión de Préstamos</h2>
+      <p class="text-muted small mb-0">Administra y consulta el historial completo de créditos.</p>
+    </div>
+    <button class="btn btn-primary shadow-sm rounded-pill px-4">
+      <i class="bi bi-plus-lg me-2"></i> Nuevo Préstamo
+    </button>
+  </div>
+
+ <div class="card border-0 shadow-sm rounded-4 mb-4">
+  <div class="card-body p-4">
+    <h6 class="fw-bold text-muted text-uppercase small mb-3">
+      <i class="bi bi-funnel-fill me-2"></i> Filtros de Búsqueda
+    </h6>
+    
+    <div class="row g-2"> <div class="col-md-3">
+        <div class="form-floating">
+          <input type="text" class="form-control bg-light border-0" id="filtroCliente" 
+                 placeholder="Nombre" [(ngModel)]="filtros.cliente" (keyup.enter)="buscar()">
+          <label for="filtroCliente">Cliente</label>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="form-floating">
+          <input type="number" class="form-control bg-light border-0" id="filtroMonto" 
+                 placeholder="Monto" [(ngModel)]="filtros.monto" (keyup.enter)="buscar()">
+          <label for="filtroMonto">Monto</label>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="form-floating">
+          <select class="form-select bg-light border-0" id="filtroLapso" 
+                  [(ngModel)]="filtros.lapzo" (change)="buscar()">
+            <option value="Todos">Todos</option>
+            <option value="Semanal">Semanal</option>
+            <option value="Quincenal">Quincenal</option>
+            <option value="Mensual">Mensual</option>
+          </select>
+          <label for="filtroLapso">Plazo</label>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="form-floating">
+          <select class="form-select bg-light border-0" id="filtroEstado" 
+                  [(ngModel)]="filtros.estado" (change)="buscar()">
+            <option value="Todos">Todos</option>
+            <option value="Activo">Activo</option>
+            <option value="Pendiente">Pendiente</option>
+            <option value="Atrasado">Atrasado</option>
+            <option value="Terminado">Terminado</option>
+          </select>
+          <label for="filtroEstado">Estado</label>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="form-floating">
+          <input type="number" class="form-control bg-light border-0" id="filtroCuotas" 
+                 placeholder="Cuotas" [(ngModel)]="filtros.cuotas" (keyup.enter)="buscar()">
+          <label for="filtroCuotas">Cuotas</label>
+        </div>
+      </div>
+
+      <div class="col-md-1 d-flex">
+        <button class="btn btn-secondary" (click)="buscar()" title="Buscar">
+          <i class="bi bi-search">Buscar</i>
+        </button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card-header bg-white py-3 px-4 border-bottom">
+      <h6 class="fw-bold mb-0 text-primary">Listado General</h6>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0 text-nowrap">
+        <thead class="bg-light">
+          <tr class="text-muted small text-uppercase">
+            <th class="ps-4">ID</th>
+            <th>Cliente</th>
+            <th>Monto</th>
+            <th>Interés</th>
+            <th>Monto Multa</th>
+            <th>Total a Pagar</th>
+            <th>Plazo</th>
+            <th>Fecha Inicio</th>
+            <th>Estado</th>
+            <th class="text-end pe-4">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of listaPrestamos">
+            <td class="ps-4 fw-bold text-muted">#{{ p.idPrestamo }}</td>
+            
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-initials bg-primary bg-opacity-10 text-primary rounded-circle me-2 small fw-bold">
+                  {{ p.cliente?.nombre?.charAt(0) }}
+                </div>
+                <div>
+                  <span class="d-block fw-bold text-dark small">
+                    {{ p.cliente?.nombre }} {{ p.cliente?.apellidos }}
+                  </span>
+                  <span *ngIf="!p.cliente" class="text-muted x-small">Cliente ID: {{ p.idCliente }}</span>
+                </div>
+              </div>
+            </td>
+
+            <td class="fw-bold text-dark">{{ p.monto | currency }}</td>
+            
+            <td>
+              <span class="badge bg-light text-dark border">
+                {{ p.interes * 100 }}%
+              </span>
+            </td>
+            <td>
+              <span class="badge bg-light text-dark border">
+                {{ p.montoMulta * 100 }}%
+              </span>
+            </td>
+
+            <td class="fw-bold text-success">{{ p.totalAPagar | currency }}</td>
+            
+            <td>
+              <span class="small text-muted">
+                {{ p.numeroCuotas }} cuotas <br> 
+                <span class="fw-bold text-dark">{{ p.lapzo }}</span>
+              </span>
+            </td>
+
+            <td class="text-muted small">{{ p.fechaInicio | date:'mediumDate' }}</td>
+
+            <td>
+              <span class="badge rounded-pill fw-normal px-2 py-1 small"
+                [ngClass]="{
+                  'bg-success bg-opacity-10 text-white': p.estado === 'Activo',
+                  'bg-secondary bg-opacity-10 text-white': p.estado === 'Terminado' || p.estado === 'Pagado',
+                  'bg-danger bg-opacity-10 text-white': p.estado === 'Atrasado' || p.estado === 'Retrasado',
+                  'bg-warning bg-opacity-10 text-white': p.estado === 'Pendiente'
+                }">
+                {{ p.estado }}
+              </span>
+            </td>
+
+            <td>
+              <button [routerLink]="['/prestamo', p.idPrestamo]" class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-3">
+                Detalles <i class="bi bi-arrow-right-short ms-1"></i>
+              </button>
+
+            </td>
+          </tr>
+          
+          <tr *ngIf="listaPrestamos.length === 0">
+            <td colspan="9" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2 opacity-25"></i>
+              No se encontraron préstamos registrados.
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="card-footer bg-white border-0 py-3 px-4">
+      <div class="small text-muted">
+        Mostrando {{ listaPrestamos.length }} registros
+      </div>
+    </div>
+
+  </div>
+
+</div>

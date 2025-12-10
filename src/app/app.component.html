@@ -1,0 +1,13 @@
+<div class="d-flex">
+
+  <app-navbar *ngIf="mostrarNavbar"></app-navbar>
+
+  <main class="flex-grow-1" 
+        [style.margin-left.px]="mostrarNavbar ? 260 : 0" 
+        style="background-color: #f8f9fa; min-height: 100vh; transition: margin-left 0.3s ease;">
+    
+    <router-outlet></router-outlet>
+  
+  </main>
+
+</div>

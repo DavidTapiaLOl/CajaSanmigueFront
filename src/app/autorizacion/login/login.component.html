@@ -1,0 +1,53 @@
+<section class="background-radial-gradient overflow-hidden vh-100 d-flex align-items-center position-relative">
+  
+  <div class="circle-decoration circle-1"></div>
+  <div class="circle-decoration circle-2"></div>
+
+  <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+    <div class="row gx-lg-5 align-items-center mb-5">
+      
+      <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+        <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+          Caja San Miguel <br />
+          <span style="color: hsl(218, 81%, 75%)">Tu futuro financiero</span>
+        </h1>
+        <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+          Ingresa a nuestra plataforma segura para gestionar tus préstamos y consultar tus estados de cuenta en tiempo real.
+        </p>
+      </div>
+
+      <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+        <div class="card bg-glass">
+          <div class="card-body px-4 py-5 px-md-5">
+            
+            <div class="text-center mb-4">
+              <img src="https://th.bing.com/th/id/R.41e2519787724e4ee1c25e886629a1b1?rik=%2bdFnMqxue%2bRhXw&riu=http%3a%2f%2fprints.ultracoloringpages.com%2f0a34a1a95c262de1bd71cf2c40524679.png&ehk=Y5f9SC%2bGCwz7Tq4T5SV54HV1mR71WRpcRiPpvibNvWw%3d&risl=&pid=ImgRaw&r=0" alt="Logo" class="img-fluid mb-4 logo-login" style="max-width: 150px;">
+              <h2 class="fw-bold mb-2">Iniciar Sesión</h2>
+            </div>
+
+            <form>
+              <div class="form-floating mb-4">
+                <input type="email" id="formEmail" class="form-control" placeholder="name@example.com" [(ngModel)]="loginData.correo" name="email" />
+                <label for="formEmail">Correo Electrónico</label>
+              </div>
+
+              <div class="form-floating mb-4">
+                <input type="password" id="formPassword" class="form-control" placeholder="Password" [(ngModel)]="loginData.password" name="password" />
+                <label for="formPassword">Contraseña</label>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-lg w-100 mb-4 shadow-sm" (click)="onLogin()">
+                Ingresar
+              </button>
+
+              <div *ngIf="errorMessage" class="alert alert-danger text-center p-2 small">
+                {{ errorMessage }}
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

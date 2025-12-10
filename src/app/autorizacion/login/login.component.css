@@ -1,0 +1,79 @@
+/* Fondo con degradado radial oscuro y elegante */
+.background-radial-gradient {
+  background-color: hsl(218, 41%, 15%);
+  background-image: radial-gradient(650px circle at 0% 0%,
+      hsl(218, 41%, 35%) 15%,
+      hsl(218, 41%, 30%) 35%,
+      hsl(218, 41%, 20%) 75%,
+      hsl(218, 41%, 19%) 80%,
+      transparent 100%),
+    radial-gradient(1250px circle at 100% 100%,
+      hsl(218, 41%, 45%) 15%,
+      hsl(218, 41%, 30%) 35%,
+      hsl(218, 41%, 20%) 75%,
+      hsl(218, 41%, 19%) 80%,
+      transparent 100%);
+}
+
+.logo-login {
+  position: relative; /* Necesario para que z-index funcione */
+  z-index: 20; /* Más alto que el vidrio (10) y los círculos (1) */
+}
+
+/* Círculos decorativos brillantes detrás del vidrio */
+.circle-decoration {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px); /* Esto crea el efecto de luz difusa */
+  z-index: 1;
+}
+
+.circle-1 {
+  height: 220px;
+  width: 220px;
+  background: radial-gradient(#44006b, #ad1fff);
+  top: 10%;
+  right: 35%;
+}
+
+.circle-2 {
+  height: 300px;
+  width: 300px;
+  background: radial-gradient(#667eea, #764ba2);
+  bottom: 10%;
+  right: 10%;
+}
+
+/* Efecto de Vidrio (Glassmorphism) */
+.bg-glass {
+  background-color: hsla(0, 0%, 100%, 0.7) !important; /* Blanco semitransparente */
+  backdrop-filter: saturate(200%) blur(25px); /* Desenfoque del fondo */
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Borde sutil */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* Ajustes para inputs flotantes */
+.form-floating > .form-control {
+  border-radius: 0.5rem;
+  border: 1px solid #ced4da;
+}
+
+.form-floating > .form-control:focus {
+  border-color: #764ba2;
+  box-shadow: 0 0 0 0.25rem rgba(118, 75, 162, 0.25);
+}
+
+/* Botón personalizado */
+.btn-primary {
+  background-color: #5daeff;
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #72b8ff;
+  transform: translateY(-2px);
+}

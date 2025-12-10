@@ -1,0 +1,63 @@
+/* Animación de entrada */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Inputs Modernos */
+.form-control, .form-select {
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-control:focus {
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+}
+
+.form-floating > label {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* Tabla */
+.table thead th {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom-width: 1px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.table tbody td {
+  vertical-align: middle;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Avatares más grandes para Clientes */
+.avatar-initials {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem; /* Letra un poco más grande */
+}
+
+/* Botones de acción */
+.btn-light:hover {
+  background-color: #e9ecef;
+}
+
+/* Paginación simple */
+.pagination .page-link {
+  border-radius: 6px;
+  margin: 0 2px;
+}
